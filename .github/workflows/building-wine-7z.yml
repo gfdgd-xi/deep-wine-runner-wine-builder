@@ -1,6 +1,5 @@
 name: Building Wine 7z Package
 run-name: ${{ github.actor }} Building Wine 7z Package 🚀
-on: [push]
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
@@ -22,15 +21,15 @@ jobs:
           # 编译 amd64 wine
           sudo aria2c -d ~/debian10-amd64 -o wineautobuild-action-7z.sh https://github.com/gfdgd-xi/deep-wine-runner/raw/main/wineautobuild-action-7z.sh
           git clone https://github.com/gfdgd-xi/auto-building-wine --depth=1
-          sudo cp auto-building-wine-test/wine-version.txt ~/debian10-amd64 -rv
-          sudo cp auto-building-wine-test/wine-url.txt ~/debian10-amd64 -rv
-          sudo cp auto-building-wine-test/wine-type.txt ~/debian10-amd64 -rv
+          sudo cp auto-building-wine/wine-version.txt ~/debian10-amd64 -rv
+          sudo cp auto-building-wine/wine-url.txt ~/debian10-amd64 -rv
+          sudo cp auto-building-wine/wine-type.txt ~/debian10-amd64 -rv
           sudo chroot ~/debian10-amd64 bash /wineautobuild-action-7z.sh
           # 提交wine
           # 获取数据
-          url=`cat auto-building-wine-test/wine-url.txt`
-          version=`cat auto-building-wine-test/wine-version.txt`
-          type=`cat auto-building-wine-test/wine-type.txt`
+          url=`cat auto-building-wine/wine-url.txt`
+          version=`cat auto-building-wine/wine-version.txt`
+          type=`cat auto-building-wine/wine-type.txt`
           curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-$version-debian10-amd64.7z" "$UPLOADURL"
           curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-$version-debian10-x86_64.7z" "$UPLOADURL"
           curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-$version-debian10-i386.7z" "$UPLOADURL"

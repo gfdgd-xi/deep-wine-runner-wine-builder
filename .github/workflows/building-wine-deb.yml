@@ -1,6 +1,5 @@
 name: Building Wine DEB
 run-name: ${{ github.actor }} is Building Wine DEB 🚀
-on: [push]
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
