@@ -1,0 +1,41 @@
+name: Building Wine DEB
+run-name: ${{ github.actor }} is Building Wine DEB 🚀
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Building Wine
+        env: 
+          GUSER: ${{ secrets.GUSER }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          UPLOADURL: ${{ secrets.UPLOADURL }}
+          KEY: ${{ secrets.KEY }}
+          KEYPASSWORD: ${{ secrets.KEYPASSWORD }}
+        run: |
+          # 配置编译容器
+          sudo apt update
+          sudo apt install lm-sensors aria2 gpg debootstrap python3 neofetch -y
+          neofetch
+          aria2c $KEY
+          gpg --import  --pinentry-mode loopback --batch --passphrase "$KEYPASSWORD"  private-file.key
+          sudo debootstrap --arch i386 buster ~/debian10-i386
+          sudo debootstrap --arch amd64 buster ~/debian10-amd64
+          sudo aria2c -d /usr/bin -o pardus-chroot https://github.com/gfdgd-xi/deep-wine-runner/raw/main/pardus-chroot
+          sudo chmod 777 /usr/bin/pardus-chroot
+          sudo pardus-chroot ~/debian10-amd64
+          # 编译 amd64 wine
+          sudo aria2c -d ~/debian10-amd64 -o wineautobuild-action.sh https://github.com/gfdgd-xi/deep-wine-runner/raw/main/wineautobuild-action.sh
+          sudo chroot ~/debian10-amd64 bash /wineautobuild-action.sh
+          # 编译 i386 wine
+          sudo aria2c -d ~/debian10-i386 -o wineautobuild-action.sh https://github.com/gfdgd-xi/deep-wine-runner/raw/main/wineautobuild-action.sh
+          sudo chroot ~/debian10-i386 bash /wineautobuild-action.sh
+          # 推源
+          git clone https://github.com/gfdgd-xi/wine-deb.git
+          cd wine-deb
+          git remote set-url origin https://$GUSER:$PASSWORD@github.com/gfdgd-xi/wine-deb.git
+          git config --global user.email "3025613752@qq.com"
+          git config --global user.name "$GUSER"
+          python3 ./addmore.py --github ~/debian10-amd64/wine/*.deb ~/debian10-i386/wine/*.deb
+          #git add . ; git commit -m add\ wine ; git push origin main
+      
