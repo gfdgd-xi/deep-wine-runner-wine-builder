@@ -1,5 +1,7 @@
 name: Building Wine 7z Package
 run-name: ${{ github.actor }} Building Wine 7z Package 🚀
+on:
+  workflow_dispatch:
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
