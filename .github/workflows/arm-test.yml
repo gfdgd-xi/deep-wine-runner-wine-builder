@@ -22,7 +22,7 @@ jobs:
           run: |
             apt update
             apt install -y sysbench
-            sysbench
+            sysbench cpu run
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step
