@@ -20,10 +20,9 @@ jobs:
 
           # Set an output parameter `uname` for use in subsequent steps
           run: |
-            arch
             apt update
-            apt install neofetch -y
-            neofetch
+            apt install -y sysbench
+            sysbench
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step
