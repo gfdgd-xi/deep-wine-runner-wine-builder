@@ -1,7 +1,6 @@
 name: Building Wine 7z Package(WOW64)(daily)
 run-name: ${{ github.actor }} Building Wine 7z Package(WOW64)(daily) 🚀
 on:
-on:
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
