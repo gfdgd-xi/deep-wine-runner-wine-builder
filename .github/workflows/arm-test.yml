@@ -11,8 +11,8 @@ jobs:
         name: Run commands
         id: runcmd
         with:
-          arch: armv7
-          distro: ubuntu18.04
+          arch: aarch64
+          distro: ubuntu22.04
 
           # Not required, but speeds up builds by storing container images in
           # a GitHub package registry.
@@ -20,8 +20,10 @@ jobs:
 
           # Set an output parameter `uname` for use in subsequent steps
           run: |
-            uname -a
-            echo ::set-output name=uname::$(uname -a)
+            arch
+            sudo apt update
+            sudo apt install neofetch -y
+            neofetch
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step
