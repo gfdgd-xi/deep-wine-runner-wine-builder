@@ -22,7 +22,7 @@ jobs:
           run: |
             num=`cat /proc/cpuinfo | grep processor | wc -l`
             apt update
-            apt install -y git
+            apt install -y git python3
             git clone https://github.com/ptitSeb/box86 --depth=1
             cd box86
             apt build-dep . -y
