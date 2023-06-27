@@ -22,8 +22,14 @@ jobs:
           run: |
             num=`cat /proc/cpuinfo | grep processor | wc -l`
             apt update
-            apt install -y sysbench
-            sysbench cpu run --threads=$num
+            apt install -y git
+            git clone https://github.com/ptitSeb/box64
+            cd box64
+            apt build-dep . -y
+            dpkg-buildpackage -b
+            
+            
+          
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step
