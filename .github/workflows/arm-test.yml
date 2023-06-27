@@ -21,8 +21,8 @@ jobs:
           # Set an output parameter `uname` for use in subsequent steps
           run: |
             arch
-            sudo apt update
-            sudo apt install neofetch -y
+            apt update
+            apt install neofetch -y
             neofetch
 
       - name: Get the output
