@@ -20,9 +20,10 @@ jobs:
 
           # Set an output parameter `uname` for use in subsequent steps
           run: |
+            num=`cat /proc/cpuinfo | grep processor | wc -l`
             apt update
             apt install -y sysbench
-            sysbench cpu run
+            sysbench cpu run --threads=$num
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step
