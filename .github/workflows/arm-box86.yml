@@ -11,7 +11,7 @@ jobs:
         name: Run commands
         id: runcmd
         with:
-          arch: aarch64
+          arch: armv7
           distro: ubuntu22.04
 
           # Not required, but speeds up builds by storing container images in
@@ -23,8 +23,8 @@ jobs:
             num=`cat /proc/cpuinfo | grep processor | wc -l`
             apt update
             apt install -y git
-            git clone https://github.com/ptitSeb/box64 --depth=1
-            cd box64
+            git clone https://github.com/ptitSeb/box86 --depth=1
+            cd box86
             apt build-dep . -y
             dpkg-buildpackage -b
             
