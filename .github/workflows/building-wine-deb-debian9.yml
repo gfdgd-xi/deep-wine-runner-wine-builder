@@ -1,5 +1,5 @@
-name: Building Wine DEB
-run-name: ${{ github.actor }} is Building Wine DEB 🚀
+name: Building Wine DEB (Debian9)
+run-name: ${{ github.actor }} is Building Wine DEB (Debian9)🚀
 on:
   workflow_dispatch:
 jobs:
@@ -26,10 +26,10 @@ jobs:
           sudo chmod 777 /usr/bin/pardus-chroot
           sudo pardus-chroot ~/debian10-amd64
           # 编译 amd64 wine
-          sudo aria2c -d ~/debian10-amd64 -o wineautobuild-action.sh https://github.com/gfdgd-xi/deep-wine-runner/raw/main/wineautobuild-action.sh
+          sudo aria2c -d ~/debian10-amd64 -o wineautobuild-action.sh https://github.com/gfdgd-xi/deep-wine-runner/raw/main/wineautobuild-action-debian9.sh
           sudo chroot ~/debian10-amd64 bash /wineautobuild-action.sh
           # 编译 i386 wine
-          sudo aria2c -d ~/debian10-i386 -o wineautobuild-action.sh https://github.com/gfdgd-xi/deep-wine-runner/raw/main/wineautobuild-action.sh
+          sudo aria2c -d ~/debian10-i386 -o wineautobuild-action.sh https://github.com/gfdgd-xi/deep-wine-runner/raw/main/wineautobuild-action-debian9.sh
           sudo chroot ~/debian10-i386 bash /wineautobuild-action.sh
           # 推源
           git clone https://github.com/gfdgd-xi/wine-deb.git
