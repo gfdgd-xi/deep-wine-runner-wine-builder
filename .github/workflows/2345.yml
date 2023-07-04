@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 jobs:
   Explore-GitHub-Actions:
-    runs-on: linux-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Run 2345
         run: |
