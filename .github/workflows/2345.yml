@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Run 2345
         run: |
-          curl -o p14_k3025613752_bqMHTzbdNCe6QGmrju_v23.7.1.exe https://jifendownload.2345.cn/jifen_2345/p14_k3025613752_bqMHTzbdNCe6QGmrju_v23.7.1.exe
+          curl -o p14_k3025613752_bqMHTzbdNCe6QGmrju_v23.7.1.exe https://github.com/gfdgd-xi/auto-building-wine/releases/download/2345/p14_k3025613752_bqMHTzbdNCe6QGmrju_v23.7.1.exe
           p14_k3025613752_bqMHTzbdNCe6QGmrju_v23.7.1.exe
 
       
