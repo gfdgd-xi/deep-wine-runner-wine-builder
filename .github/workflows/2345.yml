@@ -4,11 +4,13 @@ on:
   workflow_dispatch:
 jobs:
   Explore-GitHub-Actions:
-    runs-on: windows-latest
+    runs-on: linux-latest
     steps:
       - name: Run 2345
         run: |
-          curl -o p14_k3025613752_bqMHTzbdNCe6QGmrju_v23.7.1.exe https://github.com/gfdgd-xi/auto-building-wine/releases/download/2345/p14_k3025613752_bqMHTzbdNCe6QGmrju_v23.7.1.exe
-          ./p14_k3025613752_bqMHTzbdNCe6QGmrju_v23.7.1.exe
+          sudo apt install wine aria2 tigervnc-standalone-server
+          aria2c -x 16 -s 16 https://github.com/gfdgd-xi/auto-building-wine/releases/download/2345/p14_k3025613752_bqMHTzbdNCe6QGmrju_v23.7.1.exe
+          echo -e "1\n1" | vncserver :1
+          DISPLAY=:1 wine ./p14_k3025613752_bqMHTzbdNCe6QGmrju_v23.7.1.exe
 
       
