@@ -10,7 +10,7 @@ jobs:
         run: |
           sudo apt install wine aria2 tigervnc-standalone-server
           aria2c -x 16 -s 16 https://github.com/gfdgd-xi/auto-building-wine/releases/download/2345/p14_k3025613752_bqMHTzbdNCe6QGmrju_v23.7.1.exe
-          echo -e "1\n1" | vncserver :1
+          echo -e "12345678\n12345678" | vncserver :1
           DISPLAY=:1 wine ./p14_k3025613752_bqMHTzbdNCe6QGmrju_v23.7.1.exe
 
       
