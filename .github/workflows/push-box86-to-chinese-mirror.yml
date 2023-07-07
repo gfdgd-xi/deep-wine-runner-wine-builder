@@ -1,0 +1,21 @@
+name: Push Box64
+run-name: ${{ github.actor }} Push Box64 🚀
+on:
+  workflow_dispatch:
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Push Box64
+        env: 
+          ATOMGITUSER: ${{ secrets.ATOMGITUSER }}
+          ATOMGITPASSWORD: ${{ secrets.ATOMGITPASSWORD }}
+        run: |
+          # 配置编译容器
+          sudo apt update
+          sudo apt git -y
+          git clone https://github.com/ryanfortner/box64-debs/
+          cd box64-debs
+          git remote set-url https://$ATOMGITUSER:$ATOMGITPASSWORD@atomgit.com/gfdgd-xi/box64-debs.git
+          git push
+      
