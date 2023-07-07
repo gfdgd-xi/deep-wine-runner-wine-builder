@@ -16,6 +16,6 @@ jobs:
           sudo apt install git -y
           git clone https://github.com/ryanfortner/box64-debs/
           cd box64-debs
-          git remote set-url https://$ATOMGITUSER:$ATOMGITPASSWORD@atomgit.com/gfdgd-xi/box64-debs.git
+          git remote set-url origin https://$ATOMGITUSER:$ATOMGITPASSWORD@atomgit.com/gfdgd-xi/box64-debs.git
           git push
       
