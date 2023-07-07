@@ -13,7 +13,7 @@ jobs:
         run: |
           # 配置编译容器
           sudo apt update
-          sudo apt git -y
+          sudo apt install git -y
           git clone https://github.com/ryanfortner/box64-debs/
           cd box64-debs
           git remote set-url https://$ATOMGITUSER:$ATOMGITPASSWORD@atomgit.com/gfdgd-xi/box64-debs.git
