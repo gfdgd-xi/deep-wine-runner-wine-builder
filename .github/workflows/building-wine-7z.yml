@@ -32,9 +32,9 @@ jobs:
           url=`cat auto-building-wine/wine-url.txt`
           version=`cat auto-building-wine/wine-version.txt`
           type=`cat auto-building-wine/wine-type.txt`
-          curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-$version-debian10-amd64.7z" "$UPLOADURL"
-          curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-$version-debian10-x86_64.7z" "$UPLOADURL"
-          curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-$version-debian10-i386.7z" "$UPLOADURL"
+          #curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-$version-debian10-amd64.7z" "$UPLOADURL"
+          #curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-$version-debian10-x86_64.7z" "$UPLOADURL"
+          #curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-$version-debian10-i386.7z" "$UPLOADURL"
           sudo mv $HOME/debian10-amd64/wine/wine-$type-$version-debian10-amd64.7z   ~/wine-amd64.7z
           sudo mv $HOME/debian10-amd64/wine/wine-$type-$version-debian10-x86_64.7z  ~/wine-x86_64.7z
           sudo mv $HOME/debian10-amd64/wine/wine-$type-$version-debian10-i386.7z    ~/wine-i386.7z

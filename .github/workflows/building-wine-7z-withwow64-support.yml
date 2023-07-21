@@ -32,7 +32,7 @@ jobs:
           url=`cat auto-building-wine/wine-url.txt`
           version=`cat auto-building-wine/wine-version.txt`
           type=`cat auto-building-wine/wine-type.txt`
-          curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-wow64-$version-debian10-amd64.7z" "$UPLOADURL"
+          #curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-wow64-$version-debian10-amd64.7z" "$UPLOADURL"
           sudo mv $HOME/debian10-amd64/wine/wine-$type-wow64-$version-debian10-amd64.7z  ~/wine-amd64.7z
       - name: upload result(Wine AMD64)
         uses: actions/upload-artifact@v1
