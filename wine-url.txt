@@ -1,1 +1,1 @@
-http://deb.debian.org/debian/pool/main/w/wine/wine_5.0.3.orig.tar.xz
+https://dl.winehq.org/wine/source/4.x/wine-4.21.tar.xz
