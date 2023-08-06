@@ -1,1 +1,1 @@
-https://dl.winehq.org/wine/source/8.x/wine-8.14.tar.xz
+http://deb.debian.org/debian/pool/main/w/wine/wine_5.0.3.orig.tar.xz
