@@ -1,0 +1,38 @@
+name: Building Wine 7z Package
+run-name: ${{ github.actor }} Building Wine 7z Package 🚀
+on:
+  workflow_dispatch:
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Building Wine
+        env: 
+          GUSER: ${{ secrets.GUSER }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          UPLOADURL: ${{ secrets.UPLOADURL }}
+        run: |
+          # 配置编译容器
+          sudo apt update
+          sudo apt install aria2 debootstrap neofetch python3 curl -y
+          neofetch
+          # 编译 amd64 wine
+          git clone https://github.com/gfdgd-xi/auto-building-wine --depth=1
+          cd auto-building-wine
+          bash build-box86.sh
+      - name: upload result(Wine AMD64)
+        uses: actions/upload-artifact@v1
+        with:
+          name: wine-debian10-amd64
+          path: /home/runner/wine-amd64.7z
+      - name: upload result(Wine I386)
+        uses: actions/upload-artifact@v1
+        with:
+          name: wine-debian10-i386
+          path: /home/runner/wine-i386.7z
+      - name: upload result(Wine X86_64)
+        uses: actions/upload-artifact@v1
+        with:
+          name: wine-debian10-x86_64
+          path: /home/runner/wine-x86_64.7z
+      
