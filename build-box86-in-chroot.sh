@@ -11,5 +11,5 @@ cd box*/
 apt build-dep . -y
 #dpkg-buildpackage -b
 cmake .
-make -j$cpu
+make package -j$cpu
 cp *.deb ..
