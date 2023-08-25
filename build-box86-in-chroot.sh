@@ -7,6 +7,6 @@ cd box
 aria2c -x 16 -s 16 $1
 tar -xvf *
 cd box*/
-apt build-dep .
+apt build-dep . -y
 dpkg-buildpackage -b
 #cp *.deb ..
