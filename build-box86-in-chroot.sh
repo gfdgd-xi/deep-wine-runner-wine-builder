@@ -2,7 +2,7 @@
 cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
 cd /
 apt update
-apt install sudo dpkg-dev git make aria2 fakeroot cmake -y
+apt install sudo dpkg-dev git make python3 aria2 fakeroot cmake -y
 mkdir box
 cd box
 aria2c -x 16 -s 16 $1
