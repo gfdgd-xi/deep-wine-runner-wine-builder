@@ -1,5 +1,5 @@
-name: Building Wine 7z Package
-run-name: ${{ github.actor }} Building Wine 7z Package 🚀
+name: Building BOX86
+run-name: ${{ github.actor }} Building BOX86 🚀
 on:
   workflow_dispatch:
 jobs:
