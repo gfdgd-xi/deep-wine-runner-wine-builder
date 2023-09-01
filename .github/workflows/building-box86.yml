@@ -25,4 +25,14 @@ jobs:
         with:
           name: box86-armhf
           path: /tmp/result/box86_armhf.deb
+      - name: upload result(box64-arm64)
+        uses: actions/upload-artifact@v1
+        with:
+          name: box64-arm64
+          path: /tmp/result/box64_arm64.deb
+      - name: upload result(box64-riscv64)
+        uses: actions/upload-artifact@v1
+        with:
+          name: box64-riscv64
+          path: /tmp/result/box64_riscv64.deb
       
