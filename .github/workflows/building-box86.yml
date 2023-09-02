@@ -11,6 +11,8 @@ jobs:
           GUSER: ${{ secrets.GUSER }}
           PASSWORD: ${{ secrets.PASSWORD }}
           UPLOADURL: ${{ secrets.UPLOADURL }}
+          KEY: ${{ secrets.KEY }}
+          KEYPASSWORD: ${{ secrets.KEYPASSWORD }}
         run: |
           # 配置编译容器
           sudo apt update
