@@ -10,7 +10,7 @@ sudo aria2c -d /usr/bin -o pardus-chroot https://github.com/gfdgd-xi/deep-wine-r
 sudo chmod 777 /usr/bin/pardus-chroot
 sudo debootstrap --arch=amd64 buster debian10-amd64
 sudo debootstrap --arch=armhf buster debian10-armhf
-sudo debootstrap --arch=armhf buster debian10-arm64
+sudo debootstrap --arch=arm64 buster debian10-arm64
 sudo debootstrap --arch=riscv64 focal ubuntu20.04-riscv64
 sudo pardus-chroot debian10-amd64
 sudo pardus-chroot debian10-armhf
