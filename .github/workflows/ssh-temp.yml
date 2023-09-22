@@ -1,0 +1,9 @@
+name: Ubuntu
+on: 
+    workflow_dispatch:
+jobs:
+  Ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup Debug Session
+      uses: csexton/debugger-action@master
