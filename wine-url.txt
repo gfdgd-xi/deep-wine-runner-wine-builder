@@ -1,1 +1,1 @@
-https://dl.winehq.org/wine/source/8.x/wine-8.17.tar.xz
+https://dl.winehq.org/wine/source/8.x/wine-8.18.tar.xz
