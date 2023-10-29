@@ -13,9 +13,9 @@ jobs:
           #sudo apt upgrade -y
           sudo apt install aptitude -y
           sudo aptitude install wine aria2 tigervnc-standalone-server xfce4 wine32 -y
-          aria2c -x 16 -s 16 https://github.com/gfdgd-xi/auto-building-wine/releases/download/2345/360safe+333765+n72f89472a6.exe
+          aria2c -x 16 -s 16 https://github.com/gfdgd-xi/auto-building-wine/releases/download/2345/360zip_yqlm_333765.exe
           echo -e "12345678\n12345678" | vncserver -alwaysshared :1
           export WINEDLLOVERRIDES="mscoree,mshtml="
-          DISPLAY=:1 wine ./360safe+333765+n72f89472a6.exe /S
+          DISPLAY=:1 wine ./360zip_yqlm_333765.exe /S /pid=yqlm | true
 
       
