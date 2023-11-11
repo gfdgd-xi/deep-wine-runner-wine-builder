@@ -1,8 +1,8 @@
 name: Push Box64
 run-name: ${{ github.actor }} Push Box64 🚀
 on:
-  schedule:
-    - cron: '0 0 * * *'
+  #  schedule:
+   #- cron: '0 0 * * *'
   workflow_dispatch:
 jobs:
   Explore-GitHub-Actions:
