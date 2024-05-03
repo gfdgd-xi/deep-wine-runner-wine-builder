@@ -1,6 +1,7 @@
 name: Building Wine 7z Package(WOW64)
 run-name: ${{ github.actor }} Building Wine 7z Package(WOW64) 🚀
 on:
+  push:
   workflow_dispatch:
 jobs:
   Explore-GitHub-Actions:
