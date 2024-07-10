@@ -53,7 +53,7 @@ jobs:
           sudo chroot ~/debian10-arm64 bash -c 'cd box64; apt build-dep . -y'
           sudo chroot ~/debian10-arm64 mkdir /install
           sudo chroot ~/debian10-arm64 bash -c 'cd box64; cmake .'
-          sudo chroot ~/debian10-arm64 bash -c "cd box64; make all -j$cpu"
+          #sudo chroot ~/debian10-arm64 bash -c "cd box64; make all -j$cpu" 
           sudo chroot ~/debian10-arm64 bash -c "cd box64; make install DESTDIR=/install -j$cpu"
       - name: Pack Arm 7z
         run: |
@@ -72,7 +72,7 @@ jobs:
           cp -rv ~/debian10-arm64/install/usr/lib/x86_64-linux-gnu box64
           cp -rv ~/debian10-arm64/install/usr/local/bin/box64 box64
           7z a ~/wine-box64-arm64.7z *
-      - name: upload result(Wine AMD64)
+      - name: upload result(Wine BOX64 ARM64)
         uses: actions/upload-artifact@v1
         with:
           name: wine-wow64-box64-debian10-arm64
