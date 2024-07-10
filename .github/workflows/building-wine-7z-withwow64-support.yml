@@ -15,7 +15,7 @@ jobs:
         run: |
           # 配置编译容器
           sudo apt update
-          sudo apt install aria2 debootstrap neofetch python3 curl -y
+          sudo apt install qemu-user-static aria2 debootstrap neofetch python3 curl -y
           neofetch
           sudo debootstrap --arch amd64 buster ~/debian10-amd64
           sudo aria2c -d /usr/bin -o pardus-chroot https://github.com/gfdgd-xi/deep-wine-runner/raw/main/pardus-chroot
@@ -40,5 +40,40 @@ jobs:
         with:
           name: wine-wow64-debian10-amd64
           path: /home/runner/wine-amd64.7z
-      
-      
+      - name: Config Arm Building Environment
+        run: |
+          cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
+          sudo debootstrap --arch arm64 buster ~/debian10-arm64
+          sudo pardus-chroot ~/debian10-arm64
+          sudo chroot ~/debian10-arm64 apt update
+          sudo chroot ~/debian10-arm64 apt install git sudo make cmake -y
+      - name: Build Box64
+        run: |
+          sudo chroot ~/debian10-arm64 git clone https://github.com/ptitSeb/box64 --depth=1
+          sudo chroot ~/debian10-arm64 bash -c 'cd box64; apt build-dep . -y'
+          sudo chroot ~/debian10-arm64 mkdir /install
+          sudo chroot ~/debian10-arm64 bash -c 'cd box64; cmake .'
+          sudo chroot ~/debian10-arm64 bash -c "cd box64; make all -j$cpu"
+          sudo chroot ~/debian10-arm64 bash -c "cd box64; make install DESTDIR=/install -j$cpu"
+      - name: Pack Arm 7z
+        run: |
+          # 解压
+          cd /tmp
+          mkdir arm-wine
+          cd arm-wine
+          7z x /home/runner/wine-amd64.7z
+          mv bin/wine bin/wine-i386
+          cp ~/auto-building-wine/wine-run.sh run.sh
+          cp ~/auto-building-wine/wine-run-compatible.sh bin/wine
+          chmod 777 -Rv run.sh
+          chmod 777 -Rv bin/wine
+          mkdir -p box64
+          cp -rv ~/debian10-arm64/install/etc/box64.box64rc box64
+          cp -rv ~/debian10-arm64/install/usr/lib/x86_64-linux-gnu box64
+          cp -rv ~/debian10-arm64/install/usr/local/bin/box64 box64
+          7z a ~/wine-box64-arm64.7z *
+      - name: upload result(Wine AMD64)
+        uses: actions/upload-artifact@v1
+        with:
+          name: wine-wow64-box64-debian10-arm64
+          path: /home/runner/wine-box64-arm64.7z
