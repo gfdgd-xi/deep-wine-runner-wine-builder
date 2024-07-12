@@ -57,14 +57,16 @@ jobs:
           sudo chroot ~/debian10-arm64 bash -c "cd box64; make install DESTDIR=/install -j$cpu" | true
       - name: Pack Arm 7z
         run: |
+          cd ~
+          git clone https://github.com/gfdgd-xi/auto-building-wine --depth=1 | true
           # 解压
           cd /tmp
           mkdir arm-wine
           cd arm-wine
           7z x /home/runner/wine-amd64.7z
           mv bin/wine bin/wine-i386
-          cp ~/auto-building-wine/wine-run.sh run.sh
-          cp ~/auto-building-wine/wine-run-compatible.sh bin/wine
+          cp ~/auto-building-wine/wine-run.sh run.sh -rv
+          cp ~/auto-building-wine/wine-run-compatible.sh bin/wine -rv
           chmod 777 -Rv run.sh
           chmod 777 -Rv bin/wine
           mkdir -p box64
