@@ -42,17 +42,18 @@ jobs:
           path: /home/runner/wine-amd64.7z
       - name: Config Arm Building Environment
         run: |
-          cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
-          sudo debootstrap --arch arm64 buster ~/debian10-arm64
-          sudo pardus-chroot ~/debian10-arm64
-          sudo chroot ~/debian10-arm64 apt update
-          sudo chroot ~/debian10-arm64 apt install git sudo make cmake -y
+          # 使用交叉编译，不使用 Qemu
+          sudo chroot ~/debian10-amd64 apt install git gcc-8-aarch64-linux-gnu -y
+          # sudo debootstrap --arch arm64 buster ~/debian10-arm64
+          # sudo pardus-chroot ~/debian10-arm64
+          # sudo chroot ~/debian10-arm64 apt update
+          # sudo chroot ~/debian10-arm64 apt install git sudo make cmake -y
       - name: Build Box64
         run: |
+          cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
           sudo chroot ~/debian10-amd64 git clone https://github.com/ptitSeb/box64 --depth=1
-          sudo chroot ~/debian10-amd64 apt install gcc-8-aarch64-linux-gnu -y
           sudo chroot ~/debian10-amd64 bash -c 'cd box64; apt build-dep . -y'
-          sudo chroot ~/debian10-amd64 mkdir /install
+          sudo chroot ~/debian10-amd64 mkdir /install-box64
           sudo chroot ~/debian10-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc-8'
           sudo chroot ~/debian10-amd64 bash -c "cd box64; make all -j$cpu" | true
           sudo chroot ~/debian10-amd64 bash -c "cd box64; make install DESTDIR=/install-box64 -j$cpu" | true
@@ -65,7 +66,7 @@ jobs:
           mkdir arm-wine
           cd arm-wine
           7z x /home/runner/wine-amd64.7z
-          mv bin/wine bin/wine-i386
+          mv bin/wine bin/wine-amd64
           cp ~/auto-building-wine/wine-run.sh run.sh -rv
           cp ~/auto-building-wine/wine-run-compatible.sh bin/wine -rv
           chmod 777 -Rv run.sh
