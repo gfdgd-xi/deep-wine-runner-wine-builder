@@ -48,7 +48,7 @@ jobs:
       - name: Config Arm Building Environment
         run: |
           # 使用交叉编译，不使用 Qemu
-          sudo chroot ~/debian10-amd64 apt install git gcc-8-aarch64-linux-gnu -y
+          sudo chroot ~/debian10-amd64 apt install git gcc-8-aarch64-linux-gnu sudo make cmake -y
           # sudo debootstrap --arch arm64 buster ~/debian10-arm64
           # sudo pardus-chroot ~/debian10-arm64
           # sudo chroot ~/debian10-arm64 apt update
