@@ -13,6 +13,10 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           UPLOADURL: ${{ secrets.UPLOADURL }}
         run: |
+          cd /home/runner/
+          aria2c -x 16 -s 16 https://sourceforge.net/projects/deep-wine-runner-wine-download/files/wine-staging-wow64-9.12-debian10-amd64.7z/download
+          mv wine-staging-wow64-9.12-debian10-amd64.7z /home/runner/wine-amd64.7z
+          exit
           # 配置编译容器
           sudo apt update
           sudo apt install qemu-user-static aria2 debootstrap neofetch python3 curl -y
