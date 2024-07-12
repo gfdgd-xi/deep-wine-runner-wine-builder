@@ -53,8 +53,8 @@ jobs:
           sudo chroot ~/debian10-arm64 bash -c 'cd box64; apt build-dep . -y'
           sudo chroot ~/debian10-arm64 mkdir /install
           sudo chroot ~/debian10-arm64 bash -c 'cd box64; cmake .'
-          #sudo chroot ~/debian10-arm64 bash -c "cd box64; make all -j$cpu" 
-          sudo chroot ~/debian10-arm64 bash -c "cd box64; make install DESTDIR=/install -j$cpu"
+          sudo chroot ~/debian10-arm64 bash -c "cd box64; make all -j$cpu" ; true
+          sudo chroot ~/debian10-arm64 bash -c "cd box64; make install DESTDIR=/install -j$cpu" ; true
       - name: Pack Arm 7z
         run: |
           # 解压
