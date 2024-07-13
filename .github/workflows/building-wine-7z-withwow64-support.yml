@@ -58,6 +58,8 @@ jobs:
           cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
           sudo chroot ~/debian10-amd64 git clone https://github.com/ptitSeb/box64 --depth=1
           sudo chroot ~/debian10-amd64 bash -c 'cd box64; apt build-dep . -y'
+          # 处理 CMakeList 以便可以正常 install
+          sed -i "s/NOT _x86 AND NOT _x86_64/true/g" ~/debian10-amd64/box64/CMakeLists.txt
           sudo chroot ~/debian10-amd64 mkdir /install-box64
           sudo chroot ~/debian10-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc-8'
           sudo chroot ~/debian10-amd64 bash -c "cd box64; make all -j$cpu"
