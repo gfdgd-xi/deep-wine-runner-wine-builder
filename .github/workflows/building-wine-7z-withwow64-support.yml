@@ -78,7 +78,7 @@ jobs:
           cp -rv ~/debian10-amd64/install-box64/usr/lib/x86_64-linux-gnu box64
           cp -rv ~/debian10-amd64/install-box64/usr/local/bin/box64 box64
           7z a ~/wine-box64-arm64.7z *
-          
+
       - name: upload result(Wine BOX64 ARM64)
         uses: actions/upload-artifact@v1
         with:
@@ -94,11 +94,12 @@ jobs:
         run: |
           cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
           sudo chroot ~/debian10-amd64 rm -rf /box64
+          sudo chroot ~/debian10-amd64 rm -rf /install-box64
           sudo chroot ~/debian10-amd64 git clone https://github.com/ptitSeb/box64 --depth=1
           sudo chroot ~/debian10-amd64 bash -c 'cd box64; apt build-dep . -y'
           # 处理 CMakeList 以便可以正常 install
           sudo sed -i "s/NOT _x86 AND NOT _x86_64/true/g" ~/debian10-amd64/box64/CMakeLists.txt
-          sudo chroot ~/debian10-amd64 mkdir /install-box64
+          sudo chroot ~/debian10-amd64 mkdir -p /install-box64
           sudo chroot ~/debian10-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=riscv64-linux-gnu-gcc-8'
           sudo chroot ~/debian10-amd64 bash -c "cd box64; make all -j$cpu"
           sudo chroot ~/debian10-amd64 bash -c "cd box64; make install DESTDIR=/install-box64 -j$cpu"
