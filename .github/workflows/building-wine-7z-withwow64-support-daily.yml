@@ -116,7 +116,7 @@ jobs:
           cd /tmp
           mkdir riscv-wine
           cd riscv-wine
-          7z x /home/runner/wine-amd64.7z
+          7z x /home/runner/wine-wow64-daily-debian10-amd64.7z
           mv bin/wine bin/wine-amd64
           cp ~/auto-building-wine/wine-run.sh run.sh -rv
           cp ~/auto-building-wine/wine-run-compatible.sh bin/wine -rv
