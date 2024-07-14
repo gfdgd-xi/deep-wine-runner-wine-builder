@@ -124,5 +124,5 @@ jobs:
       - name: upload result(Wine BOX64 riscv64)
         uses: actions/upload-artifact@v1
         with:
-          name: wine-wow64-box64-debian10-arm64
+          name: wine-wow64-box64-debian10-riscv64
           path: /home/runner/wine-box64-riscv64.7z
