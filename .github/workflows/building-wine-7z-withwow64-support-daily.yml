@@ -71,10 +71,11 @@ jobs:
           git clone https://github.com/gfdgd-xi/auto-building-wine --depth=1 | true
           # 解压
           cd /tmp
-          mkdir arm-wine
-          cd arm-wine
-          7z x /home/runner/wine-wow64-daily-debian10-amd64.7z
-          mv bin/wine bin/wine-amd64
+          mkdir arm-wine/wine -p
+          mkdir arm-wine/wine/bin -p
+          cd arm-wine/wine
+          7z x /home/runner/wine-amd64.7z
+          cd ..
           cp ~/auto-building-wine/wine-run.sh run.sh -rv
           cp ~/auto-building-wine/wine-run-compatible.sh bin/wine -rv
           chmod 777 -Rv run.sh
@@ -118,10 +119,11 @@ jobs:
           cd ~
           # 解压
           cd /tmp
-          mkdir riscv-wine
-          cd riscv-wine
-          7z x /home/runner/wine-wow64-daily-debian10-amd64.7z
-          mv bin/wine bin/wine-amd64
+          mkdir riscv-wine/wine -p
+          mkdir riscv-wine/bin -p
+          cd riscv-wine/wine
+          7z x /home/runner/wine-amd64.7z
+          cd ..
           cp ~/auto-building-wine/wine-run.sh run.sh -rv
           cp ~/auto-building-wine/wine-run-compatible.sh bin/wine -rv
           chmod 777 -Rv run.sh
