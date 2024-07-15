@@ -74,7 +74,7 @@ jobs:
           mkdir arm-wine/wine -p
           mkdir arm-wine/bin -p
           cd arm-wine/wine
-          7z x /home/runner/wine-amd64.7z
+          7z x /home/runner/wine-wow64-daily-debian10-amd64.7z
           cd ..
           cp ~/auto-building-wine/wine-run.sh run.sh -rv
           cp ~/auto-building-wine/wine-run-compatible.sh bin/wine -rv
@@ -122,7 +122,7 @@ jobs:
           mkdir riscv-wine/wine -p
           mkdir riscv-wine/bin -p
           cd riscv-wine/wine
-          7z x /home/runner/wine-amd64.7z
+          7z x /home/runner/wine-wow64-daily-debian10-amd64.7z
           cd ..
           cp ~/auto-building-wine/wine-run.sh run.sh -rv
           cp ~/auto-building-wine/wine-run-compatible.sh bin/wine -rv
