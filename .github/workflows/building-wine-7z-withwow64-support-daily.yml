@@ -72,7 +72,7 @@ jobs:
           # 解压
           cd /tmp
           mkdir arm-wine/wine -p
-          mkdir arm-wine/wine/bin -p
+          mkdir arm-wine/bin -p
           cd arm-wine/wine
           7z x /home/runner/wine-amd64.7z
           cd ..
