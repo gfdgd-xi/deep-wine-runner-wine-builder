@@ -25,6 +25,7 @@ jobs:
           git clone https://github.com/termux/termux-packages/
           version=`cat auto-building-wine/wine-version.txt`
           url=`cat auto-building-wine/wine-url.txt`
+          sudo cp auto-building-wine/loadpatch.py / -rv
           cd termux-packages
           # 修改版本号
           line=$(cat x11-packages/wine-stable/build.sh | grep TERMUX_PKG_VERSION=)
@@ -38,6 +39,8 @@ jobs:
           sha256Value=$(sha256sum wine-*.tar.xz | awk '{print $1}')
           line=$(cat x11-packages/wine-stable/build.sh | grep TERMUX_PKG_SHA256=)
           sed -i "s/$line/TERMUX_PKG_SHA256=$sha256Value/g" x11-packages/wine-stable/build.sh
+          # 生效补丁
+          sed -i "s%LDFLAGS+=%python3 /loadpatch.py; LDFLAGS+=" x11-packages/wine-stable/build.sh
 
 
           cat x11-packages/wine-stable/build.sh
