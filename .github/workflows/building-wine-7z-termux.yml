@@ -42,7 +42,7 @@ jobs:
       - name: Building Wine (x86_64)
         run: |
           cd ~/termux-packages
-          bash ./build-package.sh -q -a x86_64 wine-stable
+          bash ./build-package.sh -q -i -a x86_64 wine-stable
 
       - name: Pack Tar (x86_64)
         run: |
