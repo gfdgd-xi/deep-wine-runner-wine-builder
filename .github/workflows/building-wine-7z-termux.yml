@@ -30,7 +30,7 @@ jobs:
           line=$(cat x11-packages/wine-stable/build.sh | grep TERMUX_PKG_VERSION=)
           sed -i "s/$line/TERMUX_PKG_VERSION=$version/g" x11-packages/wine-stable/build.sh
           line=$(cat x11-packages/wine-stable/build.sh | grep TERMUX_PKG_SRCURL=)
-          sed -i "s/$line/TERMUX_PKG_SRCURL=$url/g" x11-packages/wine-stable/build.sh
+          sed -i "s%$line%TERMUX_PKG_SRCURL=$url%g" x11-packages/wine-stable/build.sh
           sed -i "s/TERMUX_PKG_MAINTAINER=\"@termux\"/TERMUX_PKG_MAINTAINER=\"gfdgd xi\"/g" x11-packages/wine-stable/build.sh
           # 获取 Wine 的 sha256 值
           wget $url
