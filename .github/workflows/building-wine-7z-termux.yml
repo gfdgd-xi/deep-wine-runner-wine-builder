@@ -5,16 +5,22 @@ on:
   workflow_dispatch:
 jobs:
   Explore-GitHub-Actions:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
+    container: debian:bookworm
     steps:
       - name: Config Environment
         run: |
           cd ~
+          # 配置源码源
+          export DEBIAN_FRONTEND=noninteractive  # 防止卡 tzdate
+          mkdir -p /etc/apt/sources.list.d/
+          echo "deb-src http://deb.debian.org/debian bookworm main" > /etc/apt/sources.list.d/debian-sources.list
           # Debian 12 docker 默认没有 sudo
-          #apt update
-          #apt install sudo -y
+          apt update
+          apt install sudo -y
           sudo apt update
-          sudo apt install python3.12-venv gperf openjdk-17-jdk git -y
+          apt install python3.11-venv texinfo swig gperf openjdk-17-jdk git curl -y
+          apt build-dep wine -y
           git clone https://github.com/gfdgd-xi/auto-building-wine
           git clone https://github.com/termux/termux-packages/
           version=`cat auto-building-wine/wine-version.txt`
