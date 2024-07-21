@@ -6,11 +6,12 @@ on:
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
+    container: debian:bookworm
     steps:
       - name: Config Environment
         run: |
           cd ~
-          sudo apt install gperf openjdk-17-jdk git -y
+          sudo apt install python3.11-venv gperf openjdk-17-jdk git -y
           git clone https://github.com/gfdgd-xi/auto-building-wine
           git clone https://github.com/termux/termux-packages/
           version=`cat auto-building-wine/wine-version.txt`
@@ -18,6 +19,9 @@ jobs:
           # 修改版本号
           line=$(cat x11-packages/wine-stable/build.sh | grep TERMUX_PKG_VERSION=)
           sed -i "s/$line/TERMUX_PKG_VERSION=$version/g" x11-packages/wine-stable/build.sh
+          sed -i "s/TERMUX_PKG_MAINTAINER=\"@termux\"/TERMUX_PKG_MAINTAINER=\"gfdgd xi\"/g" x11-packages/wine-stable/build.sh
+
+
           cat x11-packages/wine-stable/build.sh
           # 配置 sdk
           bash ./scripts/setup-android-sdk.sh
