@@ -10,7 +10,7 @@ jobs:
       - name: Config Environment
         run: |
           cd ~
-          sudo apt install git -y
+          sudo apt install openjdk-17-jdk git -y
           git clone https://github.com/gfdgd-xi/auto-building-wine
           git clone https://github.com/termux/termux-packages/
           version=`cat auto-building-wine/wine-version.txt`
