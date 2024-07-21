@@ -19,7 +19,7 @@ jobs:
           apt update
           apt install sudo -y
           sudo apt update
-          apt install jq python3.11-venv texinfo swig gperf openjdk-17-jdk git curl -y
+          apt install python3-sphinx jq python3.11-venv texinfo swig gperf openjdk-17-jdk git curl -y
           apt build-dep wine -y
           git clone https://github.com/gfdgd-xi/auto-building-wine
           git clone https://github.com/termux/termux-packages/
