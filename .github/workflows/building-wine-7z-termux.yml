@@ -37,7 +37,7 @@ jobs:
           # 正确配置 /data 权限
           sudo mkdir /data -p
           sudo chmod 777 -Rv /data
-          sudo chown runner:runner -Rv /data
+          #sudo chown runner:runner -Rv /data
       
       - name: Building Wine (x86_64)
         run: |
@@ -53,6 +53,6 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: deb
-          path: /home/runner/deb.tar
+          path: /root/deb.tar
 
       
