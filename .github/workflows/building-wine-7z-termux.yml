@@ -28,6 +28,8 @@ jobs:
           # 修改版本号
           line=$(cat x11-packages/wine-stable/build.sh | grep TERMUX_PKG_VERSION=)
           sed -i "s/$line/TERMUX_PKG_VERSION=$version/g" x11-packages/wine-stable/build.sh
+          sed -i "s/$line/TERMUX_PKG_VERSION=$version/g" x11-packages/wine-stable/build.sh
+          sed -i "s/TERMUX_PKG_VERSION:0:3}/TERMUX_PKG_VERSION:0:1}.x/g" x11-packages/wine-stable/build.sh
           sed -i "s/TERMUX_PKG_MAINTAINER=\"@termux\"/TERMUX_PKG_MAINTAINER=\"gfdgd xi\"/g" x11-packages/wine-stable/build.sh
 
 
