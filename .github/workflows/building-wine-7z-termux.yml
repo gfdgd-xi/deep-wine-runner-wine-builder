@@ -40,7 +40,7 @@ jobs:
           line=$(cat x11-packages/wine-stable/build.sh | grep TERMUX_PKG_SHA256=)
           sed -i "s/$line/TERMUX_PKG_SHA256=$sha256Value/g" x11-packages/wine-stable/build.sh
           # 生效补丁
-          sed -i "s%LDFLAGS+=%python3 /loadpatch.py; LDFLAGS+=" x11-packages/wine-stable/build.sh
+          sed -i "s%LDFLAGS+=%python3 /loadpatch.py; LDFLAGS+=%g" x11-packages/wine-stable/build.sh
 
 
           cat x11-packages/wine-stable/build.sh
@@ -54,7 +54,7 @@ jobs:
       - name: Building Wine (x86_64)
         run: |
           cd ~/termux-packages
-          bash ./build-package.sh -q -i -a x86_64 wine-stable
+          bash ./build-package.sh -i -a x86_64 wine-stable
 
       - name: Pack Tar (x86_64)
         run: |
