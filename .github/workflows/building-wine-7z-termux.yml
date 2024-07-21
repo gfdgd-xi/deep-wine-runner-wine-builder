@@ -21,6 +21,10 @@ jobs:
           cat x11-packages/wine-stable/build.sh
           # 配置 sdk
           bash ./scripts/setup-android-sdk.sh
+          # 正确配置 /data 权限
+          sudo mkdir /data -p
+          sudo chmod 777 -Rv /data
+          sudo chown runner:runner -Rv /data
       
       - name: Building Wine (x86_64)
         run: |
