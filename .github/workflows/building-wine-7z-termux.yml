@@ -1,0 +1,40 @@
+name: Building Wine 7z Package (termux)
+run-name: ${{ github.actor }} Building Wine 7z Package (termux) 🚀
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Config Environment
+        run: |
+          cd ~
+          sudo apt install git -y
+          git clone https://github.com/gfdgd-xi/auto-building-wine
+          git clone https://github.com/termux/termux-packages/
+          version=`cat auto-building-wine/wine-version.txt`
+          # 修改版本号
+          line=$(cat x11-packages/wine-stable/build.sh | grep TERMUX_PKG_VERSION=)
+          sed -i "s/$line/TERMUX_PKG_VERSION=$version/g" x11-packages/wine-stable/build.sh
+          cat x11-packages/wine-stable/build.sh
+          cd termux-packages
+          bash ./scripts/setup-android-sdk.sh
+      
+      - name: Building Wine (x86_64)
+        run: |
+          cd ~/termux-packages
+          bash ./build-package.sh -a x86_64
+
+      - name: Pack Tar (x86_64)
+        run: |
+          cd ~/termux-packages/output
+          tar -cvf ~/deb.tar *
+
+      - name: upload result
+        uses: actions/upload-artifact@v1
+        with:
+          name: deb
+          path: /home/runner/deb.tar
+
+      
