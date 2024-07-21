@@ -14,11 +14,12 @@ jobs:
           git clone https://github.com/gfdgd-xi/auto-building-wine
           git clone https://github.com/termux/termux-packages/
           version=`cat auto-building-wine/wine-version.txt`
+          cd termux-packages
           # 修改版本号
           line=$(cat x11-packages/wine-stable/build.sh | grep TERMUX_PKG_VERSION=)
           sed -i "s/$line/TERMUX_PKG_VERSION=$version/g" x11-packages/wine-stable/build.sh
           cat x11-packages/wine-stable/build.sh
-          cd termux-packages
+          # 配置 sdk
           bash ./scripts/setup-android-sdk.sh
       
       - name: Building Wine (x86_64)
