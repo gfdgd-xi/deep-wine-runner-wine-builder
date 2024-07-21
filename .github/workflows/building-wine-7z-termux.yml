@@ -24,15 +24,19 @@ jobs:
           git clone https://github.com/gfdgd-xi/auto-building-wine
           git clone https://github.com/termux/termux-packages/
           version=`cat auto-building-wine/wine-version.txt`
+          url=`cat auto-building-wine/wine-url.txt`
           cd termux-packages
           # 修改版本号
           line=$(cat x11-packages/wine-stable/build.sh | grep TERMUX_PKG_VERSION=)
           sed -i "s/$line/TERMUX_PKG_VERSION=$version/g" x11-packages/wine-stable/build.sh
-          sed -i "s/$line/TERMUX_PKG_VERSION=$version/g" x11-packages/wine-stable/build.sh
-          sed -i "s/TERMUX_PKG_VERSION:0:3}/TERMUX_PKG_VERSION:0:1}.x/g" x11-packages/wine-stable/build.sh
+          line=$(cat x11-packages/wine-stable/build.sh | grep TERMUX_PKG_SRCURL=)
+          sed -i "s/$line/TERMUX_PKG_SRCURL=$url/g" x11-packages/wine-stable/build.sh
           sed -i "s/TERMUX_PKG_MAINTAINER=\"@termux\"/TERMUX_PKG_MAINTAINER=\"gfdgd xi\"/g" x11-packages/wine-stable/build.sh
+          # 获取 Wine 的 sha256 值
+          wget $url
+          sha256Value=$(sha256sum wine-*.tar.xz | awk '{print $1}')
           line=$(cat x11-packages/wine-stable/build.sh | grep TERMUX_PKG_SHA256=)
-          sed -i "s/$line//g" x11-packages/wine-stable/build.sh
+          sed -i "s/$line/TERMUX_PKG_SHA256=$sha256Value/g" x11-packages/wine-stable/build.sh
 
 
           cat x11-packages/wine-stable/build.sh
