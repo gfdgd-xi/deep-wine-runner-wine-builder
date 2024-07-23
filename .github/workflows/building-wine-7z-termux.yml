@@ -55,10 +55,10 @@ jobs:
           sudo chmod 777 -Rv /data
           #sudo chown runner:runner -Rv /data
       
-      - name: Building Wine (aarch64)
+      - name: Building Wine (x86_64)
         run: |
           cd ~/termux-packages
-          bash ./build-package.sh -i wine-stable
+          bash ./build-package.sh -a x86_64 -i wine-stable
 
       - name: Pack Tar (x86_64)
         run: |
