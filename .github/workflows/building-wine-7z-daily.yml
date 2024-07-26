@@ -4,6 +4,7 @@ on:
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
+  push:
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
@@ -30,14 +31,12 @@ jobs:
           sudo cp auto-building-wine/wine-version.txt ~/debian10-amd64 -rv
           sudo cp auto-building-wine/wine-url.txt ~/debian10-amd64 -rv
           sudo cp auto-building-wine/wine-type.txt ~/debian10-amd64 -rv
-          #sudo chroot ~/debian10-amd64 bash /wineautobuild-action-7z.sh
+          sudo chroot ~/debian10-amd64 bash /wineautobuild-action-7z.sh
           # 提交wine
           # 获取数据
           url=`cat auto-building-wine/wine-url.txt`
           version=`cat auto-building-wine/wine-version.txt`
           type=`cat auto-building-wine/wine-type.txt`
-          sudo mkdir $HOME/debian10-amd64/wine -p 
-          sudo touch $HOME/debian10-amd64/wine/wine-daily-debian10-amd64.7z
           mkdir -p ~/.ssh/
           ssh-keyscan -H frs.sourceforge.net >> ~/.ssh/known_hosts
           sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/debian10-amd64/wine/wine-daily-debian10-amd64.7z $SOURCEFORGEURL

@@ -4,6 +4,7 @@ on:
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
+  push:
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
@@ -13,6 +14,8 @@ jobs:
           GUSER: ${{ secrets.GUSER }}
           PASSWORD: ${{ secrets.PASSWORD }}
           UPLOADURL: ${{ secrets.UPLOADURL }}
+          SOURCEFORGEPASSWD: ${{ secrets.SOURCEFORGEPASSWD }}
+          SOURCEFORGEURL: ${{ secrets.SOURCEFORGEURL }}
         run: |
           # 配置编译容器
           sudo apt update
@@ -34,7 +37,9 @@ jobs:
           url=`cat auto-building-wine/wine-url.txt`
           version=`cat auto-building-wine/wine-version.txt`
           type=`cat auto-building-wine/wine-type.txt`
-          curl -F "file=@$HOME/debian10-amd64/wine/wine-wow64-daily-debian10-amd64.7z" "$UPLOADURL"
+          mkdir -p ~/.ssh/
+          ssh-keyscan -H frs.sourceforge.net >> ~/.ssh/known_hosts
+          sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/debian10-amd64/wine/wine-wow64-daily-debian10-amd64.7z $SOURCEFORGEURL
           sudo mv $HOME/debian10-amd64/wine/wine-wow64-daily-debian10-amd64.7z  ~/wine-wow64-daily-debian10-amd64.7z
       - name: upload result(Wine AMD64)
         uses: actions/upload-artifact@v1
@@ -66,6 +71,8 @@ jobs:
           GUSER: ${{ secrets.GUSER }}
           PASSWORD: ${{ secrets.PASSWORD }}
           UPLOADURL: ${{ secrets.UPLOADURL }}
+          SOURCEFORGEPASSWD: ${{ secrets.SOURCEFORGEPASSWD }}
+          SOURCEFORGEURL: ${{ secrets.SOURCEFORGEURL }}
         run: |
           cd ~
           git clone https://github.com/gfdgd-xi/auto-building-wine --depth=1 | true
@@ -85,7 +92,7 @@ jobs:
           cp -rv ~/debian10-amd64/install-box64/usr/lib/x86_64-linux-gnu box64
           cp -rv ~/debian10-amd64/install-box64/usr/local/bin/box64 box64
           7z a ~/wine-wow64-box64-daily-debian10-arm64.7z *
-          curl -F "file=@$HOME/wine-wow64-box64-daily-debian10-arm64.7z" "$UPLOADURL"
+          sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/debian10-amd64/wine/wine-wow64-box64-daily-debian10-arm64.7z $SOURCEFORGEURL
       - name: upload result(Wine BOX64 ARM64)
         uses: actions/upload-artifact@v1
         with:
@@ -115,6 +122,8 @@ jobs:
           GUSER: ${{ secrets.GUSER }}
           PASSWORD: ${{ secrets.PASSWORD }}
           UPLOADURL: ${{ secrets.UPLOADURL }}
+          SOURCEFORGEPASSWD: ${{ secrets.SOURCEFORGEPASSWD }}
+          SOURCEFORGEURL: ${{ secrets.SOURCEFORGEURL }}
         run: |
           cd ~
           # 解压
@@ -133,7 +142,7 @@ jobs:
           cp -rv ~/debian10-amd64/install-box64/usr/lib/x86_64-linux-gnu box64
           cp -rv ~/debian10-amd64/install-box64/usr/local/bin/box64 box64
           7z a ~/wine-wow64-box64-daily-debian10-riscv64.7z *
-          curl -F "file=@$HOME/wine-wow64-box64-daily-debian10-riscv64.7z" "$UPLOADURL"
+          sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/debian10-amd64/wine/wine-wow64-box64-daily-debian10-riscv64.7z $SOURCEFORGEURL
       - name: upload result(Wine BOX64 riscv64)
         uses: actions/upload-artifact@v1
         with:
