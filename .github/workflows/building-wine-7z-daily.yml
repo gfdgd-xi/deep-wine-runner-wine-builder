@@ -13,6 +13,8 @@ jobs:
           GUSER: ${{ secrets.GUSER }}
           PASSWORD: ${{ secrets.PASSWORD }}
           UPLOADURL: ${{ secrets.UPLOADURL }}
+          SOURCEFORGEPASSWD: ${{ secrets.SOURCEFORGEPASSWD }}
+          SOURCEFORGEURL: ${{ secrets.SOURCEFORGEURL }}
         run: |
           # 配置编译容器
           sudo apt update
@@ -28,15 +30,17 @@ jobs:
           sudo cp auto-building-wine/wine-version.txt ~/debian10-amd64 -rv
           sudo cp auto-building-wine/wine-url.txt ~/debian10-amd64 -rv
           sudo cp auto-building-wine/wine-type.txt ~/debian10-amd64 -rv
-          sudo chroot ~/debian10-amd64 bash /wineautobuild-action-7z.sh
+          #sudo chroot ~/debian10-amd64 bash /wineautobuild-action-7z.sh
           # 提交wine
           # 获取数据
           url=`cat auto-building-wine/wine-url.txt`
           version=`cat auto-building-wine/wine-version.txt`
           type=`cat auto-building-wine/wine-type.txt`
-          curl -F "file=@$HOME/debian10-amd64/wine/wine-daily-debian10-amd64.7z" "$UPLOADURL"
-          curl -F "file=@$HOME/debian10-amd64/wine/wine-daily-debian10-x86_64.7z" "$UPLOADURL"
-          curl -F "file=@$HOME/debian10-amd64/wine/wine-daily-debian10-i386.7z" "$UPLOADURL"
+          sudo mkdir $HOME/debian10-amd64/wine -p 
+          sudo touch $HOME/debian10-amd64/wine/wine-daily-debian10-amd64.7z
+          sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/debian10-amd64/wine/wine-daily-debian10-amd64.7z $SOURCEFORGEURL
+          sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/debian10-amd64/wine/wine-daily-debian10-x86_64.7z $SOURCEFORGEURL
+          sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/debian10-amd64/wine/wine-daily-debian10-i386.7z $SOURCEFORGEURL
           sudo mv $HOME/debian10-amd64/wine/wine-daily-debian10-amd64.7z   ~/wine-daily-debian10-amd64.7z
           sudo mv $HOME/debian10-amd64/wine/wine-daily-debian10-x86_64.7z  ~/wine-daily-debian10-x86_64.7z
           sudo mv $HOME/debian10-amd64/wine/wine-daily-debian10-i386.7z    ~/wine-daily-debian10-i386.7z
