@@ -46,17 +46,17 @@ jobs:
           sudo mv $HOME/debian10-amd64/wine/wine-daily-debian10-x86_64.7z  ~/wine-daily-debian10-x86_64.7z
           sudo mv $HOME/debian10-amd64/wine/wine-daily-debian10-i386.7z    ~/wine-daily-debian10-i386.7z
       - name: upload result(Wine AMD64)
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: wine-debian10-amd64
           path: /home/runner/wine-daily-debian10-amd64.7z
       - name: upload result(Wine I386)
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: wine-debian10-i386
           path: /home/runner/wine-daily-debian10-i386.7z
       - name: upload result(Wine X86_64)
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: wine-debian10-x86_64
           path: /home/runner/wine-daily-debian10-x86_64.7z

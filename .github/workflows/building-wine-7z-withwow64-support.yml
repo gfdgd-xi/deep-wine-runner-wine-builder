@@ -36,7 +36,7 @@ jobs:
           #curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-wow64-$version-debian10-amd64.7z" "$UPLOADURL"
           sudo mv $HOME/debian10-amd64/wine/wine-$type-wow64-$version-debian10-amd64.7z  ~/wine-amd64.7z
       - name: upload result(Wine AMD64)
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: wine-wow64-debian10-amd64
           path: /home/runner/wine-amd64.7z
@@ -81,7 +81,7 @@ jobs:
           7z a ~/wine-box64-arm64.7z *
 
       - name: upload result(Wine BOX64 ARM64)
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: wine-wow64-box64-debian10-arm64
           path: /home/runner/wine-box64-arm64.7z
@@ -124,7 +124,7 @@ jobs:
           cp -rv ~/debian10-amd64/install-box64/usr/local/bin/box64 box64
           7z a ~/wine-box64-riscv64.7z *
       - name: upload result(Wine BOX64 riscv64)
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: wine-wow64-box64-debian10-riscv64
           path: /home/runner/wine-box64-riscv64.7z

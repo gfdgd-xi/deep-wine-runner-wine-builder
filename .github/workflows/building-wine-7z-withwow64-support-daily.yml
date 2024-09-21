@@ -42,7 +42,7 @@ jobs:
           sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/debian10-amd64/wine/wine-wow64-daily-debian10-amd64.7z $SOURCEFORGEURL
           sudo mv $HOME/debian10-amd64/wine/wine-wow64-daily-debian10-amd64.7z  ~/wine-wow64-daily-debian10-amd64.7z
       - name: upload result(Wine AMD64)
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: wine-wow64-debian10-amd64
           path: /home/runner/wine-wow64-daily-debian10-amd64.7z
@@ -94,7 +94,7 @@ jobs:
           7z a ~/wine-wow64-box64-daily-debian10-arm64.7z *
           sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/wine-wow64-box64-daily-debian10-arm64.7z $SOURCEFORGEURL
       - name: upload result(Wine BOX64 ARM64)
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: wine-wow64-box64-debian10-arm64
           path: /home/runner/wine-wow64-box64-daily-debian10-arm64.7z
@@ -144,7 +144,7 @@ jobs:
           7z a ~/wine-wow64-box64-daily-debian10-riscv64.7z *
           sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/wine-wow64-box64-daily-debian10-riscv64.7z $SOURCEFORGEURL
       - name: upload result(Wine BOX64 riscv64)
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: wine-wow64-box64-debian10-riscv64
           path: /home/runner/wine-wow64-box64-daily-debian10-riscv64.7z
