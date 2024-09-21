@@ -89,7 +89,7 @@ jobs:
           chmod 777 -Rv bin/wine
           mkdir -p box64
           cp -rv ~/debian10-amd64/install-box64/etc/box64.box64rc box64
-          cp -rv ~/debian10-amd64/install-box64/usr/lib/x86_64-linux-gnu box64
+          cp -rv ~/debian10-amd64/install-box64/usr/lib/box64-x86_64-linux-gnu box64
           cp -rv ~/debian10-amd64/install-box64/usr/local/bin/box64 box64
           7z a ~/wine-wow64-box64-daily-debian10-arm64.7z *
           sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/wine-wow64-box64-daily-debian10-arm64.7z $SOURCEFORGEURL
@@ -139,7 +139,7 @@ jobs:
           chmod 777 -Rv bin/wine
           mkdir -p box64
           cp -rv ~/debian10-amd64/install-box64/etc/box64.box64rc box64
-          cp -rv ~/debian10-amd64/install-box64/usr/lib/x86_64-linux-gnu box64
+          cp -rv ~/debian10-amd64/install-box64/usr/lib/box64-x86_64-linux-gnu box64
           cp -rv ~/debian10-amd64/install-box64/usr/local/bin/box64 box64
           7z a ~/wine-wow64-box64-daily-debian10-riscv64.7z *
           sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/wine-wow64-box64-daily-debian10-riscv64.7z $SOURCEFORGEURL
