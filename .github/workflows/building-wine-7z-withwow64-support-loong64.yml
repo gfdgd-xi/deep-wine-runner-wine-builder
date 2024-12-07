@@ -1,0 +1,81 @@
+name: Building Wine 7z Package(WOW64, loong64)
+run-name: ${{ github.actor }} Building Wine 7z Package(WOW64, loong64) 🚀
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Building Wine
+        env: 
+          GUSER: ${{ secrets.GUSER }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          UPLOADURL: ${{ secrets.UPLOADURL }}
+        run: |
+          # 配置编译容器
+          sudo apt update
+          sudo apt install qemu-user-static aria2 debootstrap neofetch python3 curl -y
+          neofetch
+          sudo debootstrap --arch amd64 sid ~/debian-amd64
+          sudo aria2c -d /usr/bin -o pardus-chroot https://github.com/gfdgd-xi/deep-wine-runner/raw/main/pardus-chroot
+          sudo chmod 777 /usr/bin/pardus-chroot
+          sudo pardus-chroot ~/debian-amd64
+          # 编译 amd64 wine
+          sudo aria2c -d ~/debian-amd64 -o wineautobuild-action-7z.sh https://github.com/gfdgd-xi/deep-wine-runner/raw/main/wineautobuild-action-7z-wow64.sh
+          git clone https://github.com/gfdgd-xi/auto-building-wine --depth=1
+          sudo cp auto-building-wine/wine-version.txt ~/debian-amd64 -rv
+          sudo cp auto-building-wine/wine-url.txt ~/debian-amd64 -rv
+          sudo cp auto-building-wine/wine-type.txt ~/debian-amd64 -rv
+          sudo chroot ~/debian-amd64 bash /wineautobuild-action-7z.sh
+          # 提交wine
+          # 获取数据
+          url=`cat auto-building-wine/wine-url.txt`
+          version=`cat auto-building-wine/wine-version.txt`
+          type=`cat auto-building-wine/wine-type.txt`
+          #curl -F "file=@$HOME/debian-amd64/wine/wine-$type-wow64-$version-debian-amd64.7z" "$UPLOADURL"
+          sudo mv $HOME/debian-amd64/wine/wine-$type-wow64-$version-debian-amd64.7z  ~/wine-amd64.7z
+
+      - name: Config Loong64 Building Environment
+        run: |
+            # 使用交叉编译，不使用 Qemu
+            sudo chroot ~/debian-amd64 apt install git gcc-loongarch64-linux-gnu sudo make cmake -y
+
+      - name: Build Box64 (loong64)
+        run: |
+          cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
+          sudo chroot ~/debian-amd64 rm -rf /box64
+          sudo chroot ~/debian-amd64 rm -rf /install-box64
+          sudo chroot ~/debian-amd64 git clone https://github.com/ptitSeb/box64 --depth=1
+          sudo chroot ~/debian-amd64 bash -c 'cd box64; apt build-dep . -y'
+          # 处理 CMakeList 以便可以正常 install
+          sudo sed -i "s/NOT _x86 AND NOT _x86_64/true/g" ~/debian-amd64/box64/CMakeLists.txt
+          sudo chroot ~/debian-amd64 mkdir -p /install-box64
+          sudo chroot ~/debian-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=loongarch64-linux-gnu-gcc-14'
+          sudo chroot ~/debian-amd64 bash -c "cd box64; make all -j$cpu"
+          sudo chroot ~/debian-amd64 bash -c "cd box64; make install DESTDIR=/install-box64 -j$cpu"
+          
+      - name: Pack Riscv64 7z
+        run: |
+          cd ~
+          # 解压
+          cd /tmp
+          mkdir riscv-wine/wine -p
+          mkdir riscv-wine/bin -p
+          cd riscv-wine/wine
+          7z x /home/runner/wine-amd64.7z
+          cd ..
+          cp ~/auto-building-wine/wine-run.sh run.sh -rv
+          cp ~/auto-building-wine/wine-run-compatible.sh bin/wine -rv
+          chmod 777 -Rv run.sh
+          chmod 777 -Rv bin/wine
+          mkdir -p box64
+          cp -rv ~/debian-amd64/install-box64/etc/box64.box64rc box64
+          cp -rv ~/debian-amd64/install-box64/usr/lib/x86_64-linux-gnu box64
+          cp -rv ~/debian-amd64/install-box64/usr/local/bin/box64 box64
+          7z a ~/wine-box64-loong64.7z *
+      - name: upload result(Wine BOX64 loong64)
+        uses: actions/upload-artifact@v4
+        with:
+          name: wine-wow64-box64-sid-loong64
+          path: /home/runner/wine-box64-loong64.7z
