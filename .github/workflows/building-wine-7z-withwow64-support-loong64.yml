@@ -1,7 +1,6 @@
 name: Building Wine 7z Package(WOW64, loong64)
 run-name: ${{ github.actor }} Building Wine 7z Package(WOW64, loong64) 🚀
 on:
-  push:
   workflow_dispatch:
 jobs:
   Explore-GitHub-Actions:
@@ -54,7 +53,7 @@ jobs:
           sudo chroot ~/debian-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=loongarch64-linux-gnu-gcc-14'
           sudo chroot ~/debian-amd64 bash -c "cd box64; make all -j$cpu"
           sudo chroot ~/debian-amd64 bash -c "cd box64; make install DESTDIR=/install-box64 -j$cpu"
-          
+
       - name: Pack Riscv64 7z
         run: |
           cd ~
