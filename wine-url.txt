@@ -1,1 +1,1 @@
-https://dl.winehq.org/wine/source/9.x/wine-9.22.tar.xz
+https://dl.winehq.org/wine/source/10.0/wine-10.0-rc1.tar.xz
