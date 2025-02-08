@@ -11,4 +11,4 @@ if [[ `uname -m` == "loongarch64" ]]; then
         exit 1
     fi
 fi
-$CURRENT_DIR/box64/box64 $CURRENT_DIR/wine/bin/wine $*
+$CURRENT_DIR/box64/box64 $CURRENT_DIR/wine/bin/wine "$*"
