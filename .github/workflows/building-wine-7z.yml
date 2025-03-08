@@ -3,8 +3,9 @@ run-name: ${{ github.actor }} Building Wine 7z Package 🚀
 on:
   push:
   workflow_dispatch:
+
 jobs:
-  Explore-GitHub-Actions:
+  Building:
     runs-on: ubuntu-latest
     steps:
       - name: Building Wine
@@ -36,22 +37,38 @@ jobs:
           #curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-$version-debian10-amd64.7z" "$UPLOADURL"
           #curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-$version-debian10-x86_64.7z" "$UPLOADURL"
           #curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-$version-debian10-i386.7z" "$UPLOADURL"
-          sudo mv $HOME/debian10-amd64/wine/wine-$type-$version-debian10-amd64.7z   ~/wine-amd64.7z
-          sudo mv $HOME/debian10-amd64/wine/wine-$type-$version-debian10-x86_64.7z  ~/wine-x86_64.7z
-          sudo mv $HOME/debian10-amd64/wine/wine-$type-$version-debian10-i386.7z    ~/wine-i386.7z
+          sudo cp $HOME/debian10-amd64/wine/wine-$type-$version-debian10-amd64.7z   ~/wine-amd64.7z
+          sudo cp $HOME/debian10-amd64/wine/wine-$type-$version-debian10-x86_64.7z  ~/wine-x86_64.7z
+          sudo cp $HOME/debian10-amd64/wine/wine-$type-$version-debian10-i386.7z    ~/wine-i386.7z
+
+          mkdir ~/sourceforge-upload -pv
+          sudo cp $HOME/debian10-amd64/wine/wine-$type-$version-debian10-i386.7z    ~/sourceforge-upload/wine-$type-$version-debian10-i386.7z
+          sudo cp $HOME/debian10-amd64/wine/wine-$type-$version-debian10-amd64.7z    ~/sourceforge-upload/wine-$type-$version-debian10-amd64.7z
+          sudo cp $HOME/debian10-amd64/wine/wine-$type-$version-debian10-x86_64.7z    ~/sourceforge-upload/wine-$type-$version-debian10-x86_64.7z
+
       - name: upload result(Wine AMD64)
         uses: actions/upload-artifact@v4
         with:
           name: wine-debian10-amd64
           path: /home/runner/wine-amd64.7z
+
       - name: upload result(Wine I386)
         uses: actions/upload-artifact@v4
         with:
           name: wine-debian10-i386
           path: /home/runner/wine-i386.7z
+
       - name: upload result(Wine X86_64)
         uses: actions/upload-artifact@v4
         with:
           name: wine-debian10-x86_64
           path: /home/runner/wine-x86_64.7z
+
+      - name: upload sourceforge
+        env: 
+          SOURCEFORGEPASSWD: ${{ secrets.SOURCEFORGEPASSWD }}
+        run: |
+          sudo apt install rsync sshpass -y
+          cd sourceforge-upload
+          python3 ~/auto-building-wine/auto-upload-config.py $SOURCEFORGEPASSWD wine-*debian10*.7z
       

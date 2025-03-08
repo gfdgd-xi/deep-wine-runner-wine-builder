@@ -30,16 +30,21 @@ jobs:
           sudo chroot ~/debian10-amd64 bash /wineautobuild-action-7z.sh
           # 提交wine
           # 获取数据
-          url=`cat auto-building-wine/wine-url.txt`
-          version=`cat auto-building-wine/wine-version.txt`
-          type=`cat auto-building-wine/wine-type.txt`
+          url=`cat ~/auto-building-wine/wine-url.txt`
+          version=`cat ~/auto-building-wine/wine-version.txt`
+          type=`cat ~/auto-building-wine/wine-type.txt`
           #curl -F "file=@$HOME/debian10-amd64/wine/wine-$type-wow64-$version-debian10-amd64.7z" "$UPLOADURL"
-          sudo mv $HOME/debian10-amd64/wine/wine-$type-wow64-$version-debian10-amd64.7z  ~/wine-amd64.7z
+          sudo cp $HOME/debian10-amd64/wine/wine-$type-wow64-$version-debian10-amd64.7z  ~/wine-amd64.7z
+
+          mkdir ~/sourceforge-upload -pv
+          sudo cp $HOME/debian10-amd64/wine/wine-$type-wow64-$version-debian10-amd64.7z  ~/sourceforge-upload/wine-$type-wow64-$version-debian10-amd64.7z
+          
       - name: upload result(Wine AMD64)
         uses: actions/upload-artifact@v4
         with:
           name: wine-wow64-debian10-amd64
           path: /home/runner/wine-amd64.7z
+
       - name: Config Arm Building Environment
         run: |
           # 使用交叉编译，不使用 Qemu
@@ -48,6 +53,7 @@ jobs:
           # sudo pardus-chroot ~/debian10-arm64
           # sudo chroot ~/debian10-arm64 apt update
           # sudo chroot ~/debian10-arm64 apt install git sudo make cmake -y
+
       - name: Build Box64 (arm64)
         run: |
           cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
@@ -59,6 +65,7 @@ jobs:
           sudo chroot ~/debian10-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc-8'
           sudo chroot ~/debian10-amd64 bash -c "cd box64; make all -j$cpu"
           sudo chroot ~/debian10-amd64 bash -c "cd box64; make install DESTDIR=/install-box64 -j$cpu"
+
       - name: Pack Arm 7z
         run: |
           cd ~
@@ -79,6 +86,11 @@ jobs:
           cp -rv ~/debian10-amd64/install-box64/usr/lib/box64-x86_64-linux-gnu box64
           cp -rv ~/debian10-amd64/install-box64/usr/local/bin/box64 box64
           7z a ~/wine-box64-arm64.7z *
+
+          url=`cat ~/auto-building-wine/wine-url.txt`
+          version=`cat ~/auto-building-wine/wine-version.txt`
+          type=`cat ~/auto-building-wine/wine-type.txt`
+          sudo cp ~/wine-box64-arm64.7z  ~/sourceforge-upload/wine-$type-wow64-box64-$version-debian10-arm64.7z
 
       - name: upload result(Wine BOX64 ARM64)
         uses: actions/upload-artifact@v4
@@ -104,6 +116,7 @@ jobs:
           sudo chroot ~/debian10-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=riscv64-linux-gnu-gcc-8'
           sudo chroot ~/debian10-amd64 bash -c "cd box64; make all -j$cpu"
           sudo chroot ~/debian10-amd64 bash -c "cd box64; make install DESTDIR=/install-box64 -j$cpu"
+
       - name: Pack Riscv64 7z
         run: |
           cd ~
@@ -123,8 +136,23 @@ jobs:
           cp -rv ~/debian10-amd64/install-box64/usr/lib/box64-x86_64-linux-gnu box64
           cp -rv ~/debian10-amd64/install-box64/usr/local/bin/box64 box64
           7z a ~/wine-box64-riscv64.7z *
+
+          url=`cat ~/auto-building-wine/wine-url.txt`
+          version=`cat ~/auto-building-wine/wine-version.txt`
+          type=`cat ~/auto-building-wine/wine-type.txt`
+          sudo cp ~/wine-box64-riscv64.7z  ~/sourceforge-upload/wine-$type-wow64-box64-$version-debian10-riscv64.7z
+
       - name: upload result(Wine BOX64 riscv64)
         uses: actions/upload-artifact@v4
         with:
           name: wine-wow64-box64-debian10-riscv64
           path: /home/runner/wine-box64-riscv64.7z
+
+      - name: upload sourceforge
+        env: 
+          SOURCEFORGEPASSWD: ${{ secrets.SOURCEFORGEPASSWD }}
+        run: |
+          sudo apt install rsync sshpass -y
+          cd sourceforge-upload
+          python3 ~/auto-building-wine/auto-upload-config.py $SOURCEFORGEPASSWD wine-*debian10*.7z
+  
