@@ -97,7 +97,7 @@ def upload(filePath, password, passwordGithub):
             tagList.append(["lat", "lat-i386", "lat-amd64", "binfmt"])
             tagList.append(["qemu-user", "qemu-user-i386", "qemu-user-amd64", "binfmt"])
     #lists.insert(8, [fileName, f"https://sourceforge.net/projects/deep-wine-runner-wine-download/files/{fileName}.7z", tagList])
-    lists.insert(8, [fileName, f"https://sourceforge.net/projects/deep-wine-runner-wine-download/files/{fileName}.7z", []])
+    lists.insert(8, [fileName, f"https://sourceforge.net/projects/deep-wine-runner-wine-download/files/{fileName}.7z", tagList])
     jsonStr = json.dumps(lists, ensure_ascii=False, indent=4)
     print(tagList)
     #print(jsonStr)
