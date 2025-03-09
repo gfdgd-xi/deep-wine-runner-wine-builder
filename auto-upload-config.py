@@ -110,6 +110,7 @@ def upload(filePath, password, passwordGithub):
 
 password = sys.argv[1]
 passwordGithub = sys.argv[2]
+os.system("mkdir -p ~/.ssh/")
 os.system("ssh-keyscan -H frs.sourceforge.net >> ~/.ssh/known_hosts")
 os.system('git config --global user.email "3025613752@qq.com"')
 os.system('git config --global user.name "gfdgd-xi"')
