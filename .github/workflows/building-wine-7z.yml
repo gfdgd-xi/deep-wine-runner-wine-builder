@@ -25,6 +25,7 @@ jobs:
           # 编译 amd64 wine
           sudo aria2c -d ~/debian10-amd64 -o wineautobuild-action-7z.sh https://github.com/gfdgd-xi/deep-wine-runner/raw/main/wineautobuild-action-7z.sh
           git clone https://github.com/gfdgd-xi/auto-building-wine --depth=1
+          sudo cp auto-building-wine/ ~ -rv
           sudo cp auto-building-wine/wine-version.txt ~/debian10-amd64 -rv
           sudo cp auto-building-wine/wine-url.txt ~/debian10-amd64 -rv
           sudo cp auto-building-wine/wine-type.txt ~/debian10-amd64 -rv
