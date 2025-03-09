@@ -5,12 +5,12 @@ import json
 
 
 #filePath = sys.argv[2]
-def upload(filePath, password):
+def upload(filePath, password, passwordGithub):
     filePathName = os.path.basename(filePath)
     fileName = os.path.splitext(filePathName)[0]
     os.system("mkdir -p upload")
     os.system(f'sshpass -p "{password}" rsync -avP -e ssh "{filePath}" gfdgd-xi@frs.sourceforge.net:/home/frs/project/deep-wine-runner-wine-download')
-    os.system(f"git clone git@github.com:gfdgd-xi/wine-mirrors-websize.git")
+    os.system(f"git clone https://gfdgd-xi:{passwordGithub}@github.com/gfdgd-xi/wine-mirrors-websize.git")
     os.system("cd wine-mirrors-websize ; git pull")
     lists = []
     with open("wine-mirrors-websize/information.json", "r") as file:
@@ -109,5 +109,6 @@ def upload(filePath, password):
     #"https://sourceforge.net/projects/deep-wine-runner-wine-download/files/spark-wine8-8.20.7z/download"
 
 password = sys.argv[1]
-for i in sys.argv[2:]:
-    upload(i, password)
+passwordGithub = sys.argv[2]
+for i in sys.argv[3:]:
+    upload(i, password, passwordGithub)
