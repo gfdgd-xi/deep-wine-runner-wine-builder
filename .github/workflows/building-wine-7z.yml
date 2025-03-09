@@ -69,6 +69,6 @@ jobs:
           SOURCEFORGEPASSWD: ${{ secrets.SOURCEFORGEPASSWD }}
         run: |
           sudo apt install rsync sshpass -y
-          cd sourceforge-upload
+          cd ~/sourceforge-upload
           python3 ~/auto-building-wine/auto-upload-config.py $SOURCEFORGEPASSWD wine-*debian10*.7z
       
