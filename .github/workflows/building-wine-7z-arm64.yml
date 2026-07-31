@@ -1,0 +1,58 @@
+name: Building ARM64 Wine 7z Package
+run-name: ${{ github.actor }} Building ARM64 Wine 7z Package 🚀
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  Building:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Building Wine
+        env: 
+          GUSER: ${{ secrets.GUSER }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          UPLOADURL: ${{ secrets.UPLOADURL }}
+        run: |
+          # 配置编译容器
+          sudo apt update
+          sudo apt install aria2 debootstrap neofetch python3 curl -y
+          neofetch
+          sudo debootstrap --arch arm64 bullseye ~/debian11-arm64 https://archive.debian.org/debian/
+          sudo aria2c -d /usr/bin -o pardus-chroot https://github.com/gfdgd-xi/deep-wine-runner/raw/main/pardus-chroot
+          sudo chmod 777 /usr/bin/pardus-chroot
+          sudo pardus-chroot ~/debian11-arm64
+          # 编译 arm64 wine
+          sudo aria2c -d ~/debian11-arm64 -o wineautobuild-action-7z.sh https://github.com/gfdgd-xi/deep-wine-runner/raw/main/wineautobuild-action-7z-arm64.sh
+          git clone https://github.com/gfdgd-xi/auto-building-wine --depth=1
+          sudo cp auto-building-wine/ ~ -rv
+          sudo cp auto-building-wine/wine-version.txt ~/debian11-arm64 -rv
+          sudo cp auto-building-wine/wine-url.txt ~/debian11-arm64 -rv
+          sudo cp auto-building-wine/wine-type.txt ~/debian11-arm64 -rv
+          sudo chroot ~/debian11-arm64 bash /wineautobuild-action-7z.sh
+          # 提交wine
+          # 获取数据
+          url=`cat auto-building-wine/wine-url.txt`
+          version=`cat auto-building-wine/wine-version.txt`
+          type=`cat auto-building-wine/wine-type.txt`
+          #curl -F "file=@$HOME/debian11-arm64/wine/wine-$type-$version-debian11-arm64.7z" "$UPLOADURL"
+          sudo cp $HOME/debian11-arm64/wine/wine-$type-$version-debian11-arm64.7z   ~/wine-arm64.7z
+
+          mkdir ~/sourceforge-upload -pv
+          sudo cp $HOME/debian11-arm64/wine/wine-$type-$version-debian11-arm64.7z    ~/sourceforge-upload/wine-$type-$version-debian11-arm64.7z
+
+      - name: upload result(Wine arm64)
+        uses: actions/upload-artifact@v4
+        with:
+          name: wine-debian11-arm64
+          path: /home/runner/wine-arm64.7z
+
+      - name: upload sourceforge
+        env: 
+          SOURCEFORGEPASSWD: ${{ secrets.SOURCEFORGEPASSWD }}
+          GITHUBPASSWORD: ${{ secrets.GITHUBPASSWORD }}
+        run: |
+          sudo apt install rsync sshpass -y
+          cd ~/sourceforge-upload
+          python3 ~/auto-building-wine/auto-upload-config.py $SOURCEFORGEPASSWD $GITHUBPASSWORD wine-*debian11*.7z
+      
