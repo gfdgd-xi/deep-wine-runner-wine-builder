@@ -49,7 +49,7 @@ jobs:
       - name: Config Arm Building Environment
         run: |
           # 使用交叉编译，不使用 Qemu
-          sudo chroot ~/debian11-amd64 apt install git gcc-8-aarch64-linux-gnu sudo make cmake -y
+          sudo chroot ~/debian11-amd64 apt install git gcc-aarch64-linux-gnu sudo make cmake -y
           # sudo debootstrap --arch arm64 buster ~/debian11-arm64
           # sudo pardus-chroot ~/debian11-arm64
           # sudo chroot ~/debian11-arm64 apt update
@@ -63,7 +63,7 @@ jobs:
           # 处理 CMakeList 以便可以正常 install
           sudo sed -i "s/NOT _x86 AND NOT _x86_64/true/g" ~/debian11-amd64/box64/CMakeLists.txt
           sudo chroot ~/debian11-amd64 mkdir /install-box64
-          sudo chroot ~/debian11-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc-8'
+          sudo chroot ~/debian11-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc'
           sudo chroot ~/debian11-amd64 bash -c "cd box64; make all -j$cpu"
           sudo chroot ~/debian11-amd64 bash -c "cd box64; make install DESTDIR=/install-box64 -j$cpu"
 
@@ -114,7 +114,7 @@ jobs:
           # 处理 CMakeList 以便可以正常 install
           sudo sed -i "s/NOT _x86 AND NOT _x86_64/true/g" ~/debian11-amd64/box64/CMakeLists.txt
           sudo chroot ~/debian11-amd64 mkdir -p /install-box64
-          sudo chroot ~/debian11-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=riscv64-linux-gnu-gcc-8'
+          sudo chroot ~/debian11-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=riscv64-linux-gnu-gcc'
           sudo chroot ~/debian11-amd64 bash -c "cd box64; make all -j$cpu"
           sudo chroot ~/debian11-amd64 bash -c "cd box64; make install DESTDIR=/install-box64 -j$cpu"
 
