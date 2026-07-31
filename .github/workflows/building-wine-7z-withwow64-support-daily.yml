@@ -21,17 +21,17 @@ jobs:
           sudo apt update
           sudo apt install aria2 debootstrap neofetch python3 curl -y
           neofetch
-          sudo debootstrap --arch amd64 bullseye ~/debian10-amd64 https://archive.debian.org/debian/
+          sudo debootstrap --arch amd64 bullseye ~/debian11-amd64 https://archive.debian.org/debian/
           sudo aria2c -d /usr/bin -o pardus-chroot https://github.com/gfdgd-xi/deep-wine-runner/raw/main/pardus-chroot
           sudo chmod 777 /usr/bin/pardus-chroot
-          sudo pardus-chroot ~/debian10-amd64
+          sudo pardus-chroot ~/debian11-amd64
           # 编译 amd64 wine
-          sudo aria2c -d ~/debian10-amd64 -o wineautobuild-action-7z.sh https://github.com/gfdgd-xi/deep-wine-runner/raw/main/wineautobuild-action-7z-wow64-daily.sh
+          sudo aria2c -d ~/debian11-amd64 -o wineautobuild-action-7z.sh https://github.com/gfdgd-xi/deep-wine-runner/raw/main/wineautobuild-action-7z-wow64-daily.sh
           git clone https://github.com/gfdgd-xi/auto-building-wine --depth=1
-          sudo cp auto-building-wine/wine-version.txt ~/debian10-amd64 -rv
-          sudo cp auto-building-wine/wine-url.txt ~/debian10-amd64 -rv
-          sudo cp auto-building-wine/wine-type.txt ~/debian10-amd64 -rv
-          sudo chroot ~/debian10-amd64 bash /wineautobuild-action-7z.sh
+          sudo cp auto-building-wine/wine-version.txt ~/debian11-amd64 -rv
+          sudo cp auto-building-wine/wine-url.txt ~/debian11-amd64 -rv
+          sudo cp auto-building-wine/wine-type.txt ~/debian11-amd64 -rv
+          sudo chroot ~/debian11-amd64 bash /wineautobuild-action-7z.sh
           # 提交wine
           # 获取数据
           url=`cat auto-building-wine/wine-url.txt`
@@ -39,33 +39,33 @@ jobs:
           type=`cat auto-building-wine/wine-type.txt`
           mkdir -p ~/.ssh/
           ssh-keyscan -H frs.sourceforge.net >> ~/.ssh/known_hosts
-          sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/debian10-amd64/wine/wine-wow64-daily-debian10-amd64.7z $SOURCEFORGEURL
-          sudo mv $HOME/debian10-amd64/wine/wine-wow64-daily-debian10-amd64.7z  ~/wine-wow64-daily-debian10-amd64.7z
+          sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/debian11-amd64/wine/wine-wow64-daily-debian11-amd64.7z $SOURCEFORGEURL
+          sudo mv $HOME/debian11-amd64/wine/wine-wow64-daily-debian11-amd64.7z  ~/wine-wow64-daily-debian11-amd64.7z
       - name: upload result(Wine AMD64)
         uses: actions/upload-artifact@v4
         with:
-          name: wine-wow64-debian10-amd64
-          path: /home/runner/wine-wow64-daily-debian10-amd64.7z
+          name: wine-wow64-debian11-amd64
+          path: /home/runner/wine-wow64-daily-debian11-amd64.7z
 
       - name: Config Arm Building Environment
         run: |
           # 使用交叉编译，不使用 Qemu
-          sudo chroot ~/debian10-amd64 apt install git gcc-8-aarch64-linux-gnu sudo make cmake -y
-          # sudo debootstrap --arch arm64 buster ~/debian10-arm64
-          # sudo pardus-chroot ~/debian10-arm64
-          # sudo chroot ~/debian10-arm64 apt update
-          # sudo chroot ~/debian10-arm64 apt install git sudo make cmake -y
+          sudo chroot ~/debian11-amd64 apt install git gcc-8-aarch64-linux-gnu sudo make cmake -y
+          # sudo debootstrap --arch arm64 buster ~/debian11-arm64
+          # sudo pardus-chroot ~/debian11-arm64
+          # sudo chroot ~/debian11-arm64 apt update
+          # sudo chroot ~/debian11-arm64 apt install git sudo make cmake -y
       - name: Build Box64
         run: |
           cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
-          sudo chroot ~/debian10-amd64 git clone https://github.com/ptitSeb/box64 --depth=1
-          sudo chroot ~/debian10-amd64 bash -c 'cd box64; apt build-dep . -y'
+          sudo chroot ~/debian11-amd64 git clone https://github.com/ptitSeb/box64 --depth=1
+          sudo chroot ~/debian11-amd64 bash -c 'cd box64; apt build-dep . -y'
           # 处理 CMakeList 以便可以正常 install
-          sudo sed -i "s/NOT _x86 AND NOT _x86_64/true/g" ~/debian10-amd64/box64/CMakeLists.txt
-          sudo chroot ~/debian10-amd64 mkdir /install-box64
-          sudo chroot ~/debian10-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc-8'
-          sudo chroot ~/debian10-amd64 bash -c "cd box64; make all -j$cpu"
-          sudo chroot ~/debian10-amd64 bash -c "cd box64; make install DESTDIR=/install-box64 -j$cpu"
+          sudo sed -i "s/NOT _x86 AND NOT _x86_64/true/g" ~/debian11-amd64/box64/CMakeLists.txt
+          sudo chroot ~/debian11-amd64 mkdir /install-box64
+          sudo chroot ~/debian11-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc-8'
+          sudo chroot ~/debian11-amd64 bash -c "cd box64; make all -j$cpu"
+          sudo chroot ~/debian11-amd64 bash -c "cd box64; make install DESTDIR=/install-box64 -j$cpu"
       - name: Pack Arm 7z
         env: 
           GUSER: ${{ secrets.GUSER }}
@@ -81,42 +81,42 @@ jobs:
           mkdir arm-wine/wine -p
           mkdir arm-wine/bin -p
           cd arm-wine/wine
-          7z x /home/runner/wine-wow64-daily-debian10-amd64.7z
+          7z x /home/runner/wine-wow64-daily-debian11-amd64.7z
           cd ..
           cp ~/auto-building-wine/wine-run.sh run.sh -rv
           cp ~/auto-building-wine/wine-run-compatible.sh bin/wine -rv
           chmod 777 -Rv run.sh
           chmod 777 -Rv bin/wine
           mkdir -p box64
-          cp -rv ~/debian10-amd64/install-box64/etc/box64.box64rc box64
-          cp -rv ~/debian10-amd64/install-box64/usr/lib/box64-x86_64-linux-gnu box64
-          cp -rv ~/debian10-amd64/install-box64/usr/local/bin/box64 box64
-          7z a ~/wine-wow64-box64-daily-debian10-arm64.7z *
-          sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/wine-wow64-box64-daily-debian10-arm64.7z $SOURCEFORGEURL
+          cp -rv ~/debian11-amd64/install-box64/etc/box64.box64rc box64
+          cp -rv ~/debian11-amd64/install-box64/usr/lib/box64-x86_64-linux-gnu box64
+          cp -rv ~/debian11-amd64/install-box64/usr/local/bin/box64 box64
+          7z a ~/wine-wow64-box64-daily-debian11-arm64.7z *
+          sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/wine-wow64-box64-daily-debian11-arm64.7z $SOURCEFORGEURL
       - name: upload result(Wine BOX64 ARM64)
         uses: actions/upload-artifact@v4
         with:
-          name: wine-wow64-box64-debian10-arm64
-          path: /home/runner/wine-wow64-box64-daily-debian10-arm64.7z
+          name: wine-wow64-box64-debian11-arm64
+          path: /home/runner/wine-wow64-box64-daily-debian11-arm64.7z
 
       - name: Config Riscv64 Building Environment
         run: |
             # 使用交叉编译，不使用 Qemu
-            sudo chroot ~/debian10-amd64 apt install git gcc-riscv64-linux-gnu sudo make cmake -y
+            sudo chroot ~/debian11-amd64 apt install git gcc-riscv64-linux-gnu sudo make cmake -y
 
       - name: Build Box64 (riscv64)
         run: |
           cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
-          sudo chroot ~/debian10-amd64 rm -rf /box64
-          sudo chroot ~/debian10-amd64 rm -rf /install-box64
-          sudo chroot ~/debian10-amd64 git clone https://github.com/ptitSeb/box64 --depth=1
-          sudo chroot ~/debian10-amd64 bash -c 'cd box64; apt build-dep . -y'
+          sudo chroot ~/debian11-amd64 rm -rf /box64
+          sudo chroot ~/debian11-amd64 rm -rf /install-box64
+          sudo chroot ~/debian11-amd64 git clone https://github.com/ptitSeb/box64 --depth=1
+          sudo chroot ~/debian11-amd64 bash -c 'cd box64; apt build-dep . -y'
           # 处理 CMakeList 以便可以正常 install
-          sudo sed -i "s/NOT _x86 AND NOT _x86_64/true/g" ~/debian10-amd64/box64/CMakeLists.txt
-          sudo chroot ~/debian10-amd64 mkdir -p /install-box64
-          sudo chroot ~/debian10-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=riscv64-linux-gnu-gcc-8'
-          sudo chroot ~/debian10-amd64 bash -c "cd box64; make all -j$cpu"
-          sudo chroot ~/debian10-amd64 bash -c "cd box64; make install DESTDIR=/install-box64 -j$cpu"
+          sudo sed -i "s/NOT _x86 AND NOT _x86_64/true/g" ~/debian11-amd64/box64/CMakeLists.txt
+          sudo chroot ~/debian11-amd64 mkdir -p /install-box64
+          sudo chroot ~/debian11-amd64 bash -c 'cd box64; cmake . -DCMAKE_C_COMPILER=riscv64-linux-gnu-gcc-8'
+          sudo chroot ~/debian11-amd64 bash -c "cd box64; make all -j$cpu"
+          sudo chroot ~/debian11-amd64 bash -c "cd box64; make install DESTDIR=/install-box64 -j$cpu"
           
       - name: Pack Riscv64 7z
         env: 
@@ -132,21 +132,21 @@ jobs:
           mkdir riscv-wine/wine -p
           mkdir riscv-wine/bin -p
           cd riscv-wine/wine
-          7z x /home/runner/wine-wow64-daily-debian10-amd64.7z
+          7z x /home/runner/wine-wow64-daily-debian11-amd64.7z
           cd ..
           cp ~/auto-building-wine/wine-run.sh run.sh -rv
           cp ~/auto-building-wine/wine-run-compatible.sh bin/wine -rv
           chmod 777 -Rv run.sh
           chmod 777 -Rv bin/wine
           mkdir -p box64
-          cp -rv ~/debian10-amd64/install-box64/etc/box64.box64rc box64
-          cp -rv ~/debian10-amd64/install-box64/usr/lib/box64-x86_64-linux-gnu box64
-          cp -rv ~/debian10-amd64/install-box64/usr/local/bin/box64 box64
-          7z a ~/wine-wow64-box64-daily-debian10-riscv64.7z *
-          sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/wine-wow64-box64-daily-debian10-riscv64.7z $SOURCEFORGEURL
+          cp -rv ~/debian11-amd64/install-box64/etc/box64.box64rc box64
+          cp -rv ~/debian11-amd64/install-box64/usr/lib/box64-x86_64-linux-gnu box64
+          cp -rv ~/debian11-amd64/install-box64/usr/local/bin/box64 box64
+          7z a ~/wine-wow64-box64-daily-debian11-riscv64.7z *
+          sshpass -p "$SOURCEFORGEPASSWD" rsync -avP -e ssh $HOME/wine-wow64-box64-daily-debian11-riscv64.7z $SOURCEFORGEURL
       - name: upload result(Wine BOX64 riscv64)
         uses: actions/upload-artifact@v4
         with:
-          name: wine-wow64-box64-debian10-riscv64
-          path: /home/runner/wine-wow64-box64-daily-debian10-riscv64.7z
+          name: wine-wow64-box64-debian11-riscv64
+          path: /home/runner/wine-wow64-box64-daily-debian11-riscv64.7z
       
